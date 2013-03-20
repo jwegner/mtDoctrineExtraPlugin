@@ -78,7 +78,7 @@ class mtSluggableListener extends Doctrine_Record_Listener
       }
       elseif ($record->isSluggableFieldModified() || $record->isSlugShouldBeRegenerated())
       {
-        // the slug should be regenerated bc. sluggable some field have changed
+        // the slug should be regenerated bc. some fields have changed
         $record->setSlugValue($record->generateSlug());
       }
     }
