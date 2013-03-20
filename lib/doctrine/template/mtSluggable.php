@@ -158,7 +158,7 @@ class mtSluggable extends Doctrine_Template
    *
    * @return string
    */
-  public function cropSlug($slug, $spare = 0)
+  public function chopSlug($slug, $spare = 0)
   {
     $length = $this->getInvoker()->getSlugFieldLength();
 
@@ -311,7 +311,7 @@ class mtSluggable extends Doctrine_Template
     // make it URL friendly
     $slug = $record->slugify($slug);
     // cut it down to fit into the column
-    $slug = $record->cropSlug($slug);
+    $slug = $record->chopSlug($slug);
 
     // make it unique
     if (true === $this->_options['unique'])
@@ -348,7 +348,7 @@ class mtSluggable extends Doctrine_Template
     $length = $record->getSlugFieldLength();
     if (strlen($slug) > $length)
     {
-      $slug = $record->makeUniqueSlug($record->cropSlug($slug, $i));
+      $slug = $record->makeUniqueSlug($record->chopSlug($slug, $i));
     }
 
     return  $slug;
