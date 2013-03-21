@@ -12,16 +12,11 @@
 class mtSluggableListener extends Doctrine_Record_Listener
 {
   /**
-   * @var array
-   */
-  protected $_options = array();
-
-  /**
    * @param array $options
    */
   public function __construct(array $options)
   {
-    $this->_options = $options;
+    $this->setOption($options);
   }
 
   /**
@@ -74,12 +69,12 @@ class mtSluggableListener extends Doctrine_Record_Listener
       elseif ($record->isSlugModified())
       {
         // the slug was changed by the user
-        $record->setSlugValue($record->generateSlug($slug));
+        $record->updateSlug($slug);
       }
       elseif ($record->isSluggableFieldModified() || $record->isSlugShouldBeRegenerated())
       {
         // the slug should be regenerated bc. some fields have changed
-        $record->setSlugValue($record->generateSlug());
+        $record->updateSlug();
       }
     }
     elseif ($record->isSlugModified())

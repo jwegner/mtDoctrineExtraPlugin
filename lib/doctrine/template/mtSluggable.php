@@ -85,7 +85,23 @@ class mtSluggable extends Doctrine_Template
       throw new InvalidArgumentException(sprintf('"%s" class must implement "Doctrine_Record_Listener_Interface"', get_class($class)));
     }
 
-    $this->addListener($class);
+    $this->addListener($class, 'mt-sluggable');
+  }
+
+  /**
+   * Disable the sluggable listener..
+   */
+  public function disableSluggableListener()
+  {
+    $this->getListener()->get('mt-sluggable')->setOption('disabled', true);
+  }
+
+  /**
+   * Enable the sluggable listener.
+   */
+  public function enableSluggableListener()
+  {
+    $this->getListener()->get('mt-sluggable')->setOption('disabled', false);
   }
 
   /**
@@ -207,6 +223,23 @@ class mtSluggable extends Doctrine_Template
   public function isSlugShouldBeRegenerated()
   {
     return false;
+  }
+
+  /**
+   * Updates the slug.
+   *
+   * @param string $slug
+   *
+   * @return Doctrine_Record|mtSluggable
+   */
+  public function updateSlug($slug = null)
+  {
+    /** @var $record Doctrine_Record|mtSluggable */
+    $record = $this->getInvoker();
+
+    $record->setSlugValue($record->generateSlug($slug));
+
+    return $record;
   }
 
   /**
