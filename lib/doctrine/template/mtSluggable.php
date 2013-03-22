@@ -189,27 +189,31 @@ class mtSluggable extends Doctrine_Template
   /**
    * Checks whether the slug value is modified or not.
    *
+   * @param bool $last check if modified in the last transaction (use after save)
+   *
    * @return bool
    */
-  public function isSlugModified()
+  public function isSlugModified($last = false)
   {
     /** @var $record Doctrine_Record|mtSluggable */
     $record = $this->getInvoker();
 
-    return array_key_exists($record->getSlugFieldName(), $record->getModified());
+    return array_key_exists($record->getSlugFieldName(), $record->getModified(true, $last));
   }
 
   /**
    * Checks whether a sluggable field is modified or not.
    *
+   * @param bool $last check if modified in the last transaction (use after save)
+   *
    * @return bool
    */
-  public function isSluggableFieldModified()
+  public function isSluggableFieldModified($last = false)
   {
     /** @var $record Doctrine_Record|mtSluggable */
     $record = $this->getInvoker();
 
-    return (boolean) array_intersect($record->getSluggableFields(), array_keys($record->getModified()));
+    return (boolean) array_intersect($record->getSluggableFields(), array_keys($record->getModified(true, $last)));
   }
 
   /**
