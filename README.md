@@ -118,3 +118,86 @@ Available options (with default values):
     // under the relations key you can specify
     'foreignAlias' // trying to figure out if not given
     'columnName' // number_of_$foreignAlias
+
+### mtSortable (MySQL only)
+
+Makes records sortable by adding an order column to the table. It's a very simple
+implementation and works only with MySQL. Always reorders the whole table so it
+can be slow with very big tables.
+
+Usage:
+
+    # schema.yml
+    Product:
+      actAs:
+        mtSortable: ~
+      columns:
+        name:
+          type: string(255)
+          notnull: true
+
+It can be used in a doctrine based admin generator module easily (it requires
+[jQueryUI Sortable](http://jqueryui.com/sortable/) extension which should be
+loaded in already).
+
+    # generator.yml
+    generator:
+      class: sfDoctrineGenerator
+      param:
+        model_class:           Product
+        # ...
+        actions_base_class:    BaseMtSortableActions
+
+    # routing.yml
+    product:
+      class: sfDoctrineRouteCollection
+      options:
+        model:                Product
+        # ..
+        collection_actions:
+          # add these routes
+          sort: [get]
+          order: [post]
+
+    // sortSuccess.php
+    <?php use_helper('I18N', 'Date') ?>
+    <?php include_partial('Product/assets') ?>
+
+    <div id="sf_admin_container">
+      <h2 class="mbl">
+        <?php echo __('Sort Products', array(), 'messages') ?>
+      </h2>
+      <?php include_partial('Product/flashes') ?>
+      <div id="sf_admin_header"></div>
+      <div id="sf_admin_content">
+
+        <?php // include this partial for rendering a sortable list and the required javascript ?>
+        <?php include_partial('mtSortable/sort', array('objects' => $objects, 'route' => 'product_order')) ?>
+
+        <div class="form-actions">
+          <?php echo $helper->linkToList(array('class_suffix' => 'list', 'label' => 'Back to list')) ?>
+        </div>
+      </div>
+      <div id="sf_admin_footer"></div>
+    </div>
+
+Available options (with default values):
+
+    // column definition
+    'name'       => 'order',
+    'alias'      => null,
+    'type'       => 'integer',
+    'length'     => 1,
+    'options'    => array(
+      'unsigned' => true,
+    ),
+
+    // index definition
+    'indexName' => null,
+
+This extension adds the `updateOrder(array $order)` and `queryOrdered` methods
+to the table class and `getOrderValue`, `setOrderValue` and `getOrderFieldName`
+methods to the record class.
+
+You can customize how records appear in the sortable list by adding a
+`getSortableName` method to the record class.
