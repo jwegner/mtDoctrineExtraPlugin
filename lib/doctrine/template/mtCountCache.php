@@ -52,7 +52,7 @@ class mtCountCache extends Doctrine_Template
       }
 
       // Build column name if one is not given
-      if (!isset($options['columnName']))
+      if (!isset($this->_options['relations'][$relation]['columnName']))
       {
         $this->_options['relations'][$relation]['columnName'] = 'number_of_' . Doctrine_Inflector::tableize($foreignAlias ?: $relation);
       }
