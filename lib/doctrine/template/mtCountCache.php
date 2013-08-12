@@ -26,6 +26,7 @@ class mtCountCache extends Doctrine_Template
   {
     foreach ($this->_options['relations'] as $relation => $options)
     {
+      /** @var Doctrine_Table $relatedTable */
       $relatedTable = $this->_table->getRelation($relation)->getTable();
       $this->_options['relations'][$relation]['className'] = $relatedTable->getOption('name');
 
