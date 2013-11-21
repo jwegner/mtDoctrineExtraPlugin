@@ -61,6 +61,7 @@ class mtCountCache extends Doctrine_Template
       // Add the column to the related model
       $columnName = $this->_options['relations'][$relation]['columnName'];
       $relatedTable->setColumn($columnName, 'integer', null, array('default' => 0, 'notnull' => true));
+      $relatedTable->addIndex($relatedTable->getTableName().'_'.$columnName, array('fields' => array($columnName)));
     }
 
     // create the listener
